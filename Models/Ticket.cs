@@ -1,6 +1,6 @@
 ﻿using System.Text.Json.Serialization;
 
-namespace TicketApi
+namespace TicketApi.Models
 {
     public class Ticket
     {
@@ -8,8 +8,14 @@ namespace TicketApi
         public string Title { get; set; }
         public string Status { get; set; } = "open";
         [JsonPropertyName("create_at")]
-        public DateTime CreateAt { get; set; } = DateTime.Now;
+        public DateTime CreateAt { get;private set; } 
         public int UserId { get; set; }
+
+
+        public void SetCreateAtNow()
+    {
+        CreateAt = DateTime.Now;
+    }
 
     }
 }
