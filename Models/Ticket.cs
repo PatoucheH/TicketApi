@@ -1,6 +1,6 @@
 ﻿using System.Text.Json.Serialization;
 
-namespace TicketApi
+namespace TicketApi.Models
 {
     public class Ticket
     {

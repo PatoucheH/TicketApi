@@ -1,5 +1,6 @@
 using Microsoft.OpenApi.Models;
 using Scalar.AspNetCore;
+using TicketApi.Models;
 
 namespace TicketApi
 {

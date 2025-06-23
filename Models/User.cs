@@ -1,4 +1,4 @@
-﻿namespace TicketApi
+﻿namespace TicketApi.Models
 {
     public class User
     {
