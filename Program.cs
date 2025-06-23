@@ -11,7 +11,6 @@ namespace TicketApi
             var builder = WebApplication.CreateBuilder(args);
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
-
             var app = builder.Build();
             if (app.Environment.IsDevelopment())
             {
@@ -56,7 +55,7 @@ namespace TicketApi
             });
 
             // Get tickets with status 
-            app.MapGet("/tickets", (string? status) =>
+            app.MapGet("/tickets/status/{status}", (string? status) =>
             {
                 var result = string.IsNullOrEmpty(status) ? tickets : tickets.Where(t => t.Status.Equals(status, StringComparison.OrdinalIgnoreCase));
                 return Results.Ok(result);
@@ -65,7 +64,7 @@ namespace TicketApi
             // POST
 
             // Post one user
-            app.MapPost("/users", (User user) => 
+            app.MapPost("/users", (User user) =>
             {
                 user.Id = userIdCounter++;
                 users.Add(user);
@@ -73,14 +72,13 @@ namespace TicketApi
             });
 
             // Post one ticket to a user 
-            app.MapPost("/users/{id}/tickets", (int id, Ticket ticket) =>
+            app.MapPost("/tickets", (Ticket ticket) =>
             {
-                var user = users.FirstOrDefault(u => u.Id == id);
-                if (user is null) return Results.NotFound($"user with id : {id} not found");
                 ticket.Id = ticketIdCounter++;
-                ticket.UserId = user.Id;
+                ticket.Status = "open";
+                ticket.SetCreateAtNow();
                 tickets.Add(ticket);
-                return Results.Created($"/users/{id}/tickets/{ticket.Id}", ticket);
+                return Results.Created($"/tickets/{ticket.Id}", ticket);
             });
 
             // PUT
@@ -123,14 +121,14 @@ namespace TicketApi
                 var ticket = tickets.FirstOrDefault(t => t.Id == id);
                 if (ticket is null) return Results.NotFound($"Ticket with ID {id} not found");
                 var user = users.FirstOrDefault(u => u.Id == ticket.UserId);
-                if(user is null) return Results.NotFound($"User with ID {ticket.UserId} not found");
+                if (user is null) return Results.NotFound($"User with ID {ticket.UserId} not found");
 
                 tickets.Remove(ticket);
                 return Results.NoContent();
             });
 
 
-            
+
             app.Run();
         }
     }
