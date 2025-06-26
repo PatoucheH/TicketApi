@@ -7,15 +7,14 @@ namespace TicketApi.Models
         public int Id { get; set; }
         public string Title { get; set; }
         public string Status { get; set; } = "open";
+
         [JsonPropertyName("create_at")]
-        public DateTime CreateAt { get;private set; } 
+        public DateTime CreateAt { get; set; } = DateTime.UtcNow;
         public int UserId { get; set; }
 
+        [JsonIgnore]
+        public virtual User User { get; set; }
 
-        public void SetCreateAtNow()
-    {
-        CreateAt = DateTime.Now;
-    }
 
     }
 }

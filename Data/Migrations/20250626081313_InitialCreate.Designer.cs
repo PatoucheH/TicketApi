@@ -12,8 +12,8 @@ using TicketApi.Data;
 namespace TicketApi.Data.Migrations
 {
     [DbContext(typeof(ContextDatabase))]
-    [Migration("20250623111841_SeedInitialUsers")]
-    partial class SeedInitialUsers
+    [Migration("20250626081313_InitialCreate")]
+    partial class InitialCreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -56,6 +56,40 @@ namespace TicketApi.Data.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("Tickets");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            CreateAt = new DateTime(2025, 1, 1, 10, 45, 0, 0, DateTimeKind.Unspecified),
+                            Status = "open",
+                            Title = "Ticket1",
+                            UserId = 2
+                        },
+                        new
+                        {
+                            Id = 2,
+                            CreateAt = new DateTime(2025, 6, 25, 12, 0, 0, 0, DateTimeKind.Unspecified),
+                            Status = "open",
+                            Title = "Ticket2",
+                            UserId = 2
+                        },
+                        new
+                        {
+                            Id = 3,
+                            CreateAt = new DateTime(2025, 5, 4, 18, 0, 0, 0, DateTimeKind.Unspecified),
+                            Status = "open",
+                            Title = "Ticket3",
+                            UserId = 1
+                        },
+                        new
+                        {
+                            Id = 4,
+                            CreateAt = new DateTime(2025, 2, 21, 8, 30, 0, 0, DateTimeKind.Unspecified),
+                            Status = "open",
+                            Title = "Ticket4",
+                            UserId = 2
+                        });
                 });
 
             modelBuilder.Entity("TicketApi.Models.User", b =>
@@ -67,7 +101,6 @@ namespace TicketApi.Data.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Email")
-                        .IsRequired()
                         .HasMaxLength(150)
                         .HasColumnType("nvarchar(150)");
 
@@ -97,11 +130,18 @@ namespace TicketApi.Data.Migrations
 
             modelBuilder.Entity("TicketApi.Models.Ticket", b =>
                 {
-                    b.HasOne("TicketApi.Models.User", null)
-                        .WithMany()
+                    b.HasOne("TicketApi.Models.User", "User")
+                        .WithMany("Tickets")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("TicketApi.Models.User", b =>
+                {
+                    b.Navigation("Tickets");
                 });
 #pragma warning restore 612, 618
         }
