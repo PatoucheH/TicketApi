@@ -1,34 +1,34 @@
-﻿version: "3.8"
-
-services:
+﻿services:
   sqlserver:
     image: mcr.microsoft.com/mssql/server:2022-latest
     container_name: sqlserver
     environment:
       - ACCEPT_EULA=Y
       - SA_PASSWORD=YourStrong!Passw0rd
-      - MSSQL_PID=Express
     ports:
       - "1433:1433"
     volumes:
       - sqlserverdata:/var/opt/mssql
-    networks:
-      - app-network
+    healthcheck:
+          test: ["CMD", "/opt/mssql-tools/bin/sqlcmd", "-S", "localhost", "-U", "sa", "-P", "YourStrong!Passw0rd", "-Q", "SELECT 1"]
+          interval: 10s
+          timeout: 5s
+          retries: 10
 
   api:
-    build: .
+    build:
+      context: .
+      dockerfile: Dockerfile
     container_name: api
     depends_on:
-      - sqlserver
+      sqlserver:
+        condition: service_healthy
     environment:
-      - ConnectionStrings__DefaultConnection=Server=sqlserver;Database=MyDb;User Id=sa;Password=YourStrong!Passw0rd;
+      ConnectionStrings__DefaultConnection: "Server=sqlserver;Database=MyDb;User Id=sa;Password=YourStrongPassw0rd;Encrypt=False;TrustServerCertificate=True";
     ports:
-      - "5206:80"
-    networks:
-      - app-network
+      - "5206:5206"
+    restart: unless-stopped
+
 
 volumes:
   sqlserverdata:
-
-networks:
-  app-network:

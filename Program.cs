@@ -48,9 +48,10 @@ namespace TicketApi
                     }
                 });
             });
+
             // add context
             builder.Services.AddDbContext<ContextDatabase>(opt => opt.
-                UseSqlServer(builder.Configuration.GetConnectionString("Connection")));
+                UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
             // add controller and scope
             builder.Services.AddControllers();
@@ -62,7 +63,6 @@ namespace TicketApi
             builder.Services.AddValidatorsFromAssemblyContaining<TicketDTOValidator>();
 
             // Configure Jwt
-            builder.Services.AddScoped<IUserService, UserService>();
             builder.Services.AddScoped<IAuthService, AuthService>();
 
             builder.Services.AddAuthentication("Bearer")
@@ -83,14 +83,6 @@ namespace TicketApi
                         )
                     };
                 });
-
-            // Configure for docker 
-
-            //var connectionString = builder.Configuration.GetConnectionString("DefautConnection");
-            //var envConnStr = Environment.GetEnvironmentVariable("ConnectionStrings_DefautConnection");
-            //if (!string.IsNullOrEmpty(envConnStr)) connectionString = envConnStr;
-            //builder.Services.AddDbContext<ContextDatabase>(options => options.UseSqlServer(connectionString));
-
 
             // create and optiosn the app before running it 
             var app = builder.Build();
