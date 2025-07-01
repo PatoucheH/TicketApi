@@ -1,4 +1,4 @@
-﻿namespace TicketApi.Models
+﻿namespace TicketApi.Models.DTOs
 {
     public class UserDTO
     {

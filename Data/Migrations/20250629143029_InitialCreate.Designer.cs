@@ -12,7 +12,7 @@ using TicketApi.Data;
 namespace TicketApi.Data.Migrations
 {
     [DbContext(typeof(ContextDatabase))]
-    [Migration("20250626081313_InitialCreate")]
+    [Migration("20250629143029_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -56,40 +56,6 @@ namespace TicketApi.Data.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("Tickets");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            CreateAt = new DateTime(2025, 1, 1, 10, 45, 0, 0, DateTimeKind.Unspecified),
-                            Status = "open",
-                            Title = "Ticket1",
-                            UserId = 2
-                        },
-                        new
-                        {
-                            Id = 2,
-                            CreateAt = new DateTime(2025, 6, 25, 12, 0, 0, 0, DateTimeKind.Unspecified),
-                            Status = "open",
-                            Title = "Ticket2",
-                            UserId = 2
-                        },
-                        new
-                        {
-                            Id = 3,
-                            CreateAt = new DateTime(2025, 5, 4, 18, 0, 0, 0, DateTimeKind.Unspecified),
-                            Status = "open",
-                            Title = "Ticket3",
-                            UserId = 1
-                        },
-                        new
-                        {
-                            Id = 4,
-                            CreateAt = new DateTime(2025, 2, 21, 8, 30, 0, 0, DateTimeKind.Unspecified),
-                            Status = "open",
-                            Title = "Ticket4",
-                            UserId = 2
-                        });
                 });
 
             modelBuilder.Entity("TicketApi.Models.User", b =>
@@ -109,23 +75,15 @@ namespace TicketApi.Data.Migrations
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
+                    b.Property<string>("PasswordHash")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Role")
+                        .HasColumnType("nvarchar(max)");
+
                     b.HasKey("Id");
 
                     b.ToTable("Users");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            Email = "alice@example.com",
-                            Name = "Alice"
-                        },
-                        new
-                        {
-                            Id = 2,
-                            Email = "bob@example.com",
-                            Name = "Bob"
-                        });
                 });
 
             modelBuilder.Entity("TicketApi.Models.Ticket", b =>

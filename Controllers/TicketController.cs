@@ -1,13 +1,16 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using TicketApi.Data;
 using TicketApi.Models;
+using TicketApi.Models.DTOs;
 using TicketApi.Services;
 
 namespace TicketApi.Controllers
 {
+    
+    [ApiController]
     // Base Route for this Controller
     [Route("api/[controller]")]
-    [ApiController]
 
     // All the controller for Ticket
     public class TicketController(ContextDatabase context, ILogger<UserController> logger) : ControllerBase
@@ -18,7 +21,7 @@ namespace TicketApi.Controllers
         private TicketService _ticketService = new TicketService(context);
 
         // Get all the tickets
-        [HttpGet]
+        [HttpGet]    
         public async Task<ActionResult<IEnumerable<TicketDTO>>> GetTickets()
         {
             try
@@ -109,6 +112,7 @@ namespace TicketApi.Controllers
         }
 
         // Create a new ticket
+        [Authorize(Roles = "Admin,User")]
         [HttpPost]
         public async Task<ActionResult<TicketDTO>> CreateTicket([FromBody] TicketCreateDTO ticketDto)
         {
@@ -145,6 +149,7 @@ namespace TicketApi.Controllers
         }
 
         //Delete one ticket by its id 
+        [Authorize(Roles = "Admin,User")]
         [HttpDelete("{id}")]
         public async Task<ActionResult> DeleteTicket(int id )
         {
@@ -161,6 +166,7 @@ namespace TicketApi.Controllers
         }
 
         // Update title ticket by its id
+        [Authorize(Roles = "Admin,User")]
         [HttpPatch("title/{id}")]
         public async Task<ActionResult> UpdateTitleTicket(int id, string newTitle)
         {
@@ -177,6 +183,7 @@ namespace TicketApi.Controllers
         }
 
         // Update Status ticket by its id 
+        [Authorize(Roles = "Admin,User")]
         [HttpPatch("status/{id}")]
         public async Task<ActionResult> UpdateStatusTicket(int id, string newStatus)
         {
@@ -191,6 +198,5 @@ namespace TicketApi.Controllers
                 return StatusCode(500, "An error occured while updating the ticket");
             }
         }
-
     }
 }

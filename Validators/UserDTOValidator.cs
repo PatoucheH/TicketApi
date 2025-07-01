@@ -1,5 +1,5 @@
 ﻿using FluentValidation;
-using TicketApi.Models;
+using TicketApi.Models.DTOs;
 
 
 namespace TicketApi.Validators

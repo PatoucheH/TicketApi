@@ -1,7 +1,7 @@
 ﻿using FluentValidation;
-using TicketApi.Models;
 using TicketApi.Data;
 using Microsoft.EntityFrameworkCore;
+using TicketApi.Models.DTOs;
 
 
 namespace TicketApi.Validators

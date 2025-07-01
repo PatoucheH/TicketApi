@@ -1,14 +1,17 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using TicketApi.Data;
 using TicketApi.Models;
+using TicketApi.Models.DTOs;
 using TicketApi.Services;
 
 namespace TicketApi.Controllers
 {
-    // Bas route for this controlelr
+    
+    [ApiController] 
+    // Basz route for this controlelr
     [Route("api/[controller]")]
-    [ApiController]
     public class UserController(ContextDatabase context, ILogger<UserController> logger) : ControllerBase
     {
         // create the context, the logegr and the UserService
@@ -39,7 +42,6 @@ namespace TicketApi.Controllers
             }
         }
 
-
         // get one user by his ID
         [HttpGet("/{id}")]
         public async Task<ActionResult<UserDTO>> GetUserById(int id)
@@ -64,6 +66,7 @@ namespace TicketApi.Controllers
         }
 
         // Create a new user
+        [Authorize(Roles = "Admin")]
         [HttpPost]
         public async Task<ActionResult<UserDTO>> CreateUser([FromBody] UserDTO userDto)
         {
@@ -93,6 +96,7 @@ namespace TicketApi.Controllers
         }
 
         // Delete a user by its id 
+        [Authorize(Roles = "Admin")]
         [HttpDelete("{id}")]
 
         public async Task<ActionResult> DeleteUser(int id )
@@ -110,7 +114,7 @@ namespace TicketApi.Controllers
         }
 
         // Update all the info about one user by its ID 
-
+        [Authorize(Roles = "Admin")]
         [HttpPut]
         public async Task<ActionResult> UpdateAllInfoAboutOneUSer(int id, UserDTO userDto)
         {
@@ -131,7 +135,5 @@ namespace TicketApi.Controllers
                 return StatusCode(500, "An error occured while updating the user");
             }
         }
-    }
-
-    
+    } 
 }

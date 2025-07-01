@@ -1,0 +1,34 @@
+﻿version: "3.8"
+
+services:
+  sqlserver:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    container_name: sqlserver
+    environment:
+      - ACCEPT_EULA=Y
+      - SA_PASSWORD=YourStrong!Passw0rd
+      - MSSQL_PID=Express
+    ports:
+      - "1433:1433"
+    volumes:
+      - sqlserverdata:/var/opt/mssql
+    networks:
+      - app-network
+
+  api:
+    build: .
+    container_name: api
+    depends_on:
+      - sqlserver
+    environment:
+      - ConnectionStrings__DefaultConnection=Server=sqlserver;Database=MyDb;User Id=sa;Password=YourStrong!Passw0rd;
+    ports:
+      - "5206:80"
+    networks:
+      - app-network
+
+volumes:
+  sqlserverdata:
+
+networks:
+  app-network:

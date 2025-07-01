@@ -1,5 +1,8 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
+using System.Collections.Generic;
 using TicketApi.Models;
+using TicketApi.Services;
 
 namespace TicketApi.Data
 {
@@ -47,22 +50,24 @@ namespace TicketApi.Data
                     .OnDelete(DeleteBehavior.Cascade);
             });
 
-
             // if in development create some seed to fill the database
-            if (Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") == "Development")
-            {
-                modelBuilder.Entity<User>().HasData(
-                    new User { Id = 1, Name = "Alice", Email = "alice@example.com" },
-                    new User { Id = 2, Name = "Bob", Email = "bob@example.com" }
-                );
+            //    if (Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") == "Development")
+            //    {
+            //        var hasher = new PasswordHasher<User>();
+            //        var admin = new User { Id = 1, Name = "Hugo", Email = "Hugo@example.com", Role = "Admin" };
+            //        admin.PasswordHash = hasher.HashPassword(admin, "Admin");
+            //        var user = new User { Id = 2, Name = "Bob", Email = "bob@example.com", Role = "User" };
+            //        user.PasswordHash = hasher.HashPassword(user, "Bob123");
 
-                modelBuilder.Entity<Ticket>().HasData(
-                    new Ticket { Id=1, Title = "Ticket1", Status = "open", UserId = 2, CreateAt = new DateTime(2025, 01, 01, 10, 45,0) },
-                    new Ticket { Id=2, Title = "Ticket2", Status = "open", UserId = 2, CreateAt = new DateTime(2025, 06, 25, 12, 0, 0) },
-                    new Ticket { Id=3, Title = "Ticket3", Status = "open", UserId = 1, CreateAt = new DateTime(2025, 05, 04, 18, 0,0) },
-                    new Ticket { Id=4, Title = "Ticket4", Status = "open", UserId = 2, CreateAt = new DateTime(2025, 02, 21, 08, 30,0) }
-                );
-            }
-        }        
+            //        modelBuilder.Entity<User>().HasData(admin, user);
+
+            //        modelBuilder.Entity<Ticket>().HasData(
+            //            new Ticket { Id=1, Title = "Ticket1", Status = "open", UserId = 2, CreateAt = new DateTime(2025, 01, 01, 10, 45,0) },
+            //            new Ticket { Id=2, Title = "Ticket2", Status = "open", UserId = 2, CreateAt = new DateTime(2025, 06, 25, 12, 0, 0) },
+            //            new Ticket { Id=3, Title = "Ticket3", Status = "open", UserId = 1, CreateAt = new DateTime(2025, 05, 04, 18, 0,0) },
+            //            new Ticket { Id=4, Title = "Ticket4", Status = "open", UserId = 2, CreateAt = new DateTime(2025, 02, 21, 08, 30,0) }
+            //        );
+            //    }
+        }
     }
 }
