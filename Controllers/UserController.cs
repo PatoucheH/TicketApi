@@ -65,6 +65,28 @@ namespace TicketApi.Controllers
             }
         }
 
+        // Get users by their names
+        [HttpGet("/users/{name}")]
+        public async Task<ActionResult<User>> GetUsersByName(string name)
+        {
+            try
+            {
+                IEnumerable<User> users = await _userService.GetUsersByName(name);
+                var usersDto = users.Select(u => new UserDTO
+                {
+                    Id = u.Id,
+                    Name = u.Name,
+                    Email = u.Email
+                });
+                return Ok(usersDto);
+            }
+            catch(Exception ex)
+            {
+                _logger.LogError(ex, "Error in GetUsersByName");
+                return StatusCode(500, "An error occured while retrieving users");
+            }
+        }
+
         // Create a new user
         [Authorize(Roles = "Admin")]
         [HttpPost]

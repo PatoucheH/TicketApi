@@ -11,7 +11,8 @@ namespace TicketApi.Services
     public interface IUserService
     {
         Task<IEnumerable<User>> GetUsers();
-        Task<User> GetUserById(int id);
+        Task<User?> GetUserById(int id);
+        Task<IEnumerable<User>> GetUsersByName(string name);
         Task<User> CreateUser(User user);
         Task DeleteUser(int id);
         Task UpdateAllInfoAboutOneUser(int id , User userDto);
@@ -47,6 +48,18 @@ namespace TicketApi.Services
         public async Task<User?> GetUserById(int id)
         {
             return await _context.Users.SingleOrDefaultAsync(u => u.Id == id);
+        }
+
+        /// <summary>
+        /// Retrieves a collection of users whose names start with the specified string.
+        /// </summary>
+        /// <param name="name">The string to match at the beginning of user names. This value cannot be null.</param>
+        /// <returns>A task that represents the asynchronous operation. The task result contains an <see cref="IEnumerable{T}"/>
+        /// of <see cref="User"/> objects whose names start with the specified string. Returns an empty collection if no
+        /// users match.</returns>
+        public async Task<IEnumerable<User>> GetUsersByName(string name)
+        {
+            return await _context.Users.Where(u => u.Name.StartsWith(name)).ToListAsync();
         }
 
         /// <summary>
