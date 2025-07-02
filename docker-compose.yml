@@ -4,16 +4,17 @@
     container_name: sqlserver
     environment:
       - ACCEPT_EULA=Y
-      - SA_PASSWORD=YourStrong!Passw0rd
+      - SA_PASSWORD=YourStrongPassw0rd
     ports:
       - "1433:1433"
     volumes:
       - sqlserverdata:/var/opt/mssql
     healthcheck:
-          test: ["CMD", "/opt/mssql-tools/bin/sqlcmd", "-S", "localhost", "-U", "sa", "-P", "YourStrong!Passw0rd", "-Q", "SELECT 1"]
-          interval: 10s
-          timeout: 5s
-          retries: 10
+      test: ["CMD", "/opt/mssql-tools/bin/sqlcmd", "-S", "localhost", "-U", "sa", "-P", "YourStrongPassw0rd", "-Q", "SELECT 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+
 
   api:
     build:
@@ -24,7 +25,8 @@
       sqlserver:
         condition: service_healthy
     environment:
-      ConnectionStrings__DefaultConnection: "Server=sqlserver;Database=TicketApi;User Id=sa;Password=YourStrong!Passw0rd;Encrypt=False;TrustServerCertificate=True"
+      ConnectionStrings__DefaultConnection: "Server=sqlserver;Database=TicketApi;User Id=sa;Password=YourStrongPassw0rd;Encrypt=False;TrustServerCertificate=True"
+      ASPNETCORE_ENVIRONMENT: "Docker"
     ports:
       - "5206:5206"
     restart: unless-stopped
