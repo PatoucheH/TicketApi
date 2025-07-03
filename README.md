@@ -30,6 +30,7 @@ Elle permet de gérer des **tickets** attachés à des **utilisateurs**, avec un
 ## 🧱 Modèle de données
 
 ### 👤 User
+
 ```csharp
 public class User {
     public int Id { get; set; }
@@ -40,6 +41,7 @@ public class User {
 ```
 
 ### 🎫 Ticket
+
 ```csharp
 public class Ticket {
     public int Id { get; set; }
@@ -57,11 +59,12 @@ public class Ticket {
 
 - [.NET SDK 8 ou 9](https://dotnet.microsoft.com/)
 - SQL Server (localdb ou instance réelle)
-- (Facultatif) [Postman](https://www.postman.com/) pour tester les endpoints
+- (Facultatif) Swagger / Scalar pour tester les endpoints
 
 ### ⚙️ Configuration
 
 Dans `appsettings.json`, configure la chaîne de connexion :
+
 ```json
 "ConnectionStrings": {
   "DefaultConnection": "Server=(localdb)\mssqllocaldb;Database=TicketDb;Trusted_Connection=True;"
@@ -82,9 +85,11 @@ dotnet run
 ## 🔐 Authentification JWT
 
 ### Enregistrement
+
 ```http
 POST /auth/register
 ```
+
 ```json
 {
   "username": "testuser",
@@ -93,9 +98,11 @@ POST /auth/register
 ```
 
 ### Connexion
+
 ```http
 POST /auth/login
 ```
+
 ```json
 {
   "username": "testuser",
@@ -104,6 +111,7 @@ POST /auth/login
 ```
 
 Tu recevras un **JWT token** :
+
 ```json
 {
   "token": "eyJhbGciOiJIUzI1NiIsInR..."
@@ -111,6 +119,7 @@ Tu recevras un **JWT token** :
 ```
 
 Utilise ce token dans Swagger ou Postman :
+
 ```
 Authorization: Bearer <votre_token>
 ```
@@ -120,10 +129,12 @@ Authorization: Bearer <votre_token>
 ## 📬 Endpoints principaux
 
 ### 🧾 Auth
+
 - `POST /auth/register` — Créer un utilisateur
 - `POST /auth/login` — Obtenir un JWT token
 
 ### 👤 Users
+
 - `GET /users`
 - `GET /users/{id}`
 - `POST /users`
@@ -131,6 +142,7 @@ Authorization: Bearer <votre_token>
 - `DELETE /users/{id}`
 
 ### 🎫 Tickets
+
 - `GET /tickets`
 - `GET /tickets/{id}`
 - `POST /tickets`

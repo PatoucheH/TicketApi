@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 using TicketApi.Data;
 using TicketApi.Models;
 using TicketApi.Models.DTOs;
@@ -33,7 +34,7 @@ namespace TicketApi.Controllers
                     Title = t.Title,
                     Status = t.Status,
                     CreateAt = t.CreateAt,
-                    UserId = t.UserId
+                    //UserId = t.UserId
                 });
                 return Ok(ticketsDto);
             }
@@ -57,7 +58,7 @@ namespace TicketApi.Controllers
                     Title = t.Title,
                     Status = t.Status,
                     CreateAt = t.CreateAt,
-                    UserId = t.UserId
+                    //UserId = t.UserId
                 });
                 return Ok(ticketsDto);
             }
@@ -82,7 +83,7 @@ namespace TicketApi.Controllers
                     Title = t.Title,
                     Status = t.Status,
                     CreateAt = t.CreateAt,
-                    UserId = t.UserId
+                    //UserId = t.UserId
                 });
                 return Ok(ticketsDto);
             }
@@ -106,7 +107,7 @@ namespace TicketApi.Controllers
                 Title = ticket.Title,
                 Status = ticket.Status,
                 CreateAt = ticket.CreateAt,
-                UserId = ticket.UserId
+                //UserId = ticket.UserId
             };
             return Ok(ticketDto);
         }
@@ -118,7 +119,11 @@ namespace TicketApi.Controllers
         {
             try
             {
-                bool userExists = _context.Users.Any(u => u.Id == ticketDto.UserId);
+                var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier);
+                if (userIdClaim is null) return Unauthorized("User id not found in token");
+                var userId = int.Parse(userIdClaim.Value);
+
+                bool userExists = _context.Users.Any(u => u.Id == userId);
                 if (!userExists) return BadRequest("The Id of the user selected doesn't exists ! ");
 
                 var ticket = new Ticket
@@ -126,7 +131,7 @@ namespace TicketApi.Controllers
                     Title = ticketDto.Title,
                     Status = "open",
                     CreateAt = DateTime.UtcNow,
-                    UserId = ticketDto.UserId
+                    UserId = userId
                 };
                 _context.Tickets.Add(ticket);
                 await _context.SaveChangesAsync();
@@ -137,7 +142,7 @@ namespace TicketApi.Controllers
                     Title = ticket.Title,
                     Status = ticket.Status,
                     CreateAt = ticket.CreateAt,
-                    UserId = ticket.UserId
+                    //UserId = ticket.UserId
                 };
                 return CreatedAtAction(nameof(GetTicketById), new { id = ticket.Id }, createdTicket);
             }
